@@ -275,7 +275,20 @@ class JobSearchAppHome
 			cin >> menuOption;
 			if(menuOption != "")
 			{
-				cout << "you have selected " << menuOption << endl << endl;
+				cout << "\nyou have selected : " << menuOption << endl << endl;
+				
+				if(menuOption == "jd")
+				{
+					readFile("jobdescription", false);
+				}
+				else if(menuOption == "up")
+				{
+
+				}
+				else if(menuOption == "vp")
+				{
+
+				}			
 			}			
 		}
 
