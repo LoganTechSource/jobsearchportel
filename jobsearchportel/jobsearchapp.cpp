@@ -238,13 +238,13 @@ class JobSearchAppHome
 		}
 
 
-		string readFile(string userName, bool firstLine)
+		string readFile(string fileName, bool firstLine)
 		{
 			
-			string fileName = userName + ".dat";			
+			string file = fileName + ".dat";			
 			string data;
 
-			ifstream inputFileStream(fileName.c_str());
+			ifstream inputFileStream(file.c_str());
 
 			if(firstLine)
 			{
