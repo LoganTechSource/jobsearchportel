@@ -14,6 +14,7 @@ class JobSearchAppHome
 	
 	public:
 		int invalidLoginCount;
+		string loggedUser;
 
 		/* Welcome page section */
 		void loadWelcomePage()
@@ -206,6 +207,7 @@ class JobSearchAppHome
 			string passwordFromFile = readFile(userName, true);
 			if(passwordFromFile == password)
 			{
+				loggedUser = userName;
 				loadHomeMenu();
 			}
 			else
@@ -263,6 +265,7 @@ class JobSearchAppHome
 			return data;
 		}
 
+		
 		/* Home page after Login */
 		void loadHomeMenu()
 		{
@@ -275,22 +278,133 @@ class JobSearchAppHome
 			cin >> menuOption;
 			if(menuOption != "")
 			{
-				cout << "\nyou have selected : " << menuOption << endl << endl;
+				cout << "\nYou have selected : " << menuOption << endl << endl;
 				
 				if(menuOption == "jd")
 				{
-					readFile("jobdescription", false);
+					getJobDescriptions();
 				}
 				else if(menuOption == "up")
 				{
-
+					updateProfile();
 				}
 				else if(menuOption == "vp")
 				{
-
+					viewProfileData();
 				}			
 			}			
 		}
+
+		void reLoadHomeMenu()
+		{
+			string option;
+			cout << "\nPress 'rs' to reselect menu 'q' to quit : ";
+			cin >> option;
+			if(option == "rs")
+			{
+				loadHomeMenu();
+			}
+			
+			if(option == "q")
+			{
+				cout << "\n\nThank you!" << endl << endl;
+			}
+
+		}
+
+		/* Job Description Menu */
+		void getJobDescriptions()
+		{
+			readFile("jobdescription", false);
+			reLoadHomeMenu();			
+		}
+
+		/* Update Profile Menu*/
+		void updateProfile()
+		{
+			string profileData = getUserProfileDetails();
+			updateProfile(profileData);
+		}
+
+		string getUserProfileDetails()
+		{
+			string dataToStore;
+			string firstName, lastName, dateOfBirth, language, city, phoneNo, degree, yeareOfPassing, percentage, programminLanguage; 
+			cout << "Please enter your details\n\n";
+			cout << "\n First Name: ";
+			cin >> firstName;
+			cout << "\n Last Name: ";
+			cin >> lastName;
+			cout << "\n Date of birth (mm-dd-yyyy): ";
+			cin >> dateOfBirth;
+			cout << "\n Language (eg: Tamil,English): ";
+			cin >> language;
+			cout << "\n City: ";
+			cin >> city;
+			cout << "\n Phone number: ";
+			cin >> phoneNo;
+			cout << "\n Degree: ";
+			cin >> degree;
+			cout << "\n Passed out year: ";
+			cin >> yeareOfPassing;
+			cout << "\n Percentage: ";
+			cin >> percentage;
+			cout << "\n Programming language: ";
+			cin >> programminLanguage;
+
+			dataToStore += "First Name          : " + firstName + "\n";
+			dataToStore += "Last Name           : " + lastName + "\n";
+			dataToStore += "Date of Birth       : " + dateOfBirth + "\n";
+			dataToStore += "Language            : " + language + "\n";
+			dataToStore += "city                : " + city + "\n";
+			dataToStore += "Phone number        : " + phoneNo + "\n";
+			dataToStore += "Degree              : " + degree + "\n";
+			dataToStore += "Year of passing     : " + yeareOfPassing + "\n";
+			dataToStore += "Percentage          : " + percentage + "%\n";
+			dataToStore += "Programming language: " + programminLanguage + "\n";
+
+			return dataToStore;
+
+		}
+
+		void updateProfile(string dataToUpdate)
+		{
+			string fileData = readFile(loggedUser, true);
+			fileData = fileData + "\n" + dataToUpdate;
+			writeDataIntoFile(loggedUser + ".dat", fileData);
+			cout << "\n\n Profile updated successfully!" ;
+			cout << "-------------------------------------------------------------" << endl << endl;
+			reLoadHomeMenu();
+		}
+
+		/* View Profile Menu */
+		void viewProfileData()
+		{
+			string fileName = loggedUser + ".dat";
+			string data;
+			ifstream inputFileStream(fileName.c_str());
+			
+			int lineCount = 0;
+			cout << "-------------------------------------------------------------" << endl;
+			cout << "			Profile" << endl;
+			cout << "-------------------------------------------------------------" << endl;
+			while (getline(inputFileStream, data))
+			{
+				if(lineCount != 0)
+				{
+					cout << data << endl;
+				}
+				else
+				{
+					lineCount++;
+				}
+			}
+
+			cout << "-------------------------------------------------------------" << endl << endl;
+			reLoadHomeMenu();
+
+		}
+		
 
 };
 
